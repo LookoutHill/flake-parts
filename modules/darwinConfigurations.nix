@@ -22,10 +22,8 @@ in
       example = literalExpression ''
         {
           my-machine = inputs.nixpkgs.lib.darwinSystem {
-            # system is not needed with freshly generated hardware-configuration.nix
-            # system = "x86_64-linux";  # or set nixpkgs.hostPlatform in a module.
+            # system = "aarch64-darwin";
             modules = [
-              ./my-machine/darwin-configuration.nix
               config.darwinModules.my-module
             ];
           };
