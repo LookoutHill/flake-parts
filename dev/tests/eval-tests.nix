@@ -269,6 +269,7 @@ rec {
       darwinModules = { };
       devShells = { };
       formatter = { };
+      homeConfigurations = { };
       legacyPackages = { };
       nixosConfigurations = { };
       nixosModules = { };
@@ -298,6 +299,7 @@ rec {
       darwinModules = { };
       devShells = { a = { }; b = { }; };
       formatter = { };
+      homeConfigurations = { };
       legacyPackages = { a = { }; b = { }; };
       nixosConfigurations = { };
       nixosModules = { };
