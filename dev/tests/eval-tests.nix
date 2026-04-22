@@ -200,6 +200,17 @@ rec {
       partitionedAttrs.devShells = "dev";
     });
 
+  darwinModulesFlake = mkFlake
+    {
+      inputs.self = { outPath = "/test/path"; };
+    }
+    {
+      systems = [ ];
+      flake.darwinModules.example = { lib, ... }: {
+        options.test.option = lib.mkOption { default = "darwin-test"; };
+      };
+    };
+
   nixosModulesFlake = mkFlake
     {
       inputs.self = { outPath = "/test/path"; };
@@ -254,6 +265,8 @@ rec {
     assert empty == {
       apps = { };
       checks = { };
+      darwinConfigurations = { };
+      darwinModules = { };
       devShells = { };
       formatter = { };
       legacyPackages = { };
@@ -281,6 +294,8 @@ rec {
         };
       };
       checks = { a = { }; b = { }; };
+      darwinConfigurations = { };
+      darwinModules = { };
       devShells = { a = { }; b = { }; };
       formatter = { };
       legacyPackages = { a = { }; b = { }; };
@@ -340,6 +355,17 @@ rec {
     assert specialArgFlake.foo;
 
     assert builtins.isAttrs partitionWithoutExtraInputsFlake.devShells.x86_64-linux;
+
+    assert darwinModulesFlake.darwinModules.example._class == "darwin";
+
+    assert darwinModulesFlake.darwinModules.example._file == "/test/path/flake.nix#darwinModules.example";
+
+    assert (lib.evalModules {
+      class = "darwin";
+      modules = [
+        darwinModulesFlake.darwinModules.example
+      ];
+    }).config.test.option == "darwin-test";
 
     assert nixosModulesFlake.nixosModules.example._class == "nixos";
 
